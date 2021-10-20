@@ -18,9 +18,15 @@
 #include "camera.h"
 
 GLuint VAO;
+GLuint VAO_quad;
 GLuint n_elements;
+GLuint n_elements2;
+
+GLuint FBO;
+GLuint RBO; 
 
 GLuint program_id;
+GLuint program_postprocess_id;
 GLuint texture_id;
 Camera cam;
 
@@ -51,6 +57,23 @@ void init()
   // -> VAO_quad = m.load_to_gpu();
   // Create a new FBO and RBO and associated texture as described in the subject.
   // 
+
+  program_postprocess_id = glhelper::create_program_from_file("shaders/textured_quad.vert", "shaders/traitement_convolutif.frag");
+  Mesh m2 = Mesh::create_grid(2);
+  auto rmat2 = glm::rotate(glm::mat4(1.0), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+  m2.apply_matrix(rmat2);
+  VAO_quad = m2.load_to_gpu();
+  n_elements2= m2.size_element();
+
+  glGenFramebuffers(1, &FBO)
+  glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+  glGenTextures(...);
+  glBindTexture( GL_TEXTURE_2D, );
+  glTexImage2D(...);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
 }
 
 void set_uniform_mvp(GLuint program)
@@ -80,7 +103,15 @@ static void display_callback()
   glUseProgram(program_id);
   glBindVertexArray(VAO);
   set_uniform_mvp(program_id);
-  glDrawElements(GL_TRIANGLES, n_elements, GL_UNSIGNED_INT, 0); CHECK_GL_ERROR();
+
+  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  glUseProgram(program_postprocess_id);
+  glBindVertexArray(VAO_quad);
+  set_uniform_mvp(program_postprocess_id);
+
+  glDrawElements(GL_TRIANGLES, n_elements2, GL_UNSIGNED_INT, 0); CHECK_GL_ERROR();
 
   //TODO 
   // Render in the window the rendered scene as a textured quad to postprocess
