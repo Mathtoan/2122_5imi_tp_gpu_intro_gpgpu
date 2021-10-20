@@ -23,7 +23,8 @@ int program_id;
 // Méthode d'initialisation pour afficher un carre qui recouvre la fenêtre
 void init()
 {
-    program_id = glhelper::create_program_from_file("shaders/textured_quad.vert", "shaders/texture.frag");
+    // program_id = glhelper::create_program_from_file("shaders/textured_quad.vert", "shaders/texture.frag");
+    program_id = glhelper::create_program_from_file("shaders/textured_quad.vert", "shaders/traitement_simple.frag");
 
   Mesh m = Mesh::create_grid(2);
   auto rmat = glm::rotate(glm::mat4(1.0), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
