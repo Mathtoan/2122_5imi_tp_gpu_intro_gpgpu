@@ -23,8 +23,7 @@ int program_id;
 // Méthode d'initialisation pour afficher un carre qui recouvre la fenêtre
 void init()
 {
-    // program_id = glhelper::create_program_from_file("shaders/textured_quad.vert", "shaders/texture.frag");
-    program_id = glhelper::create_program_from_file("shaders/textured_quad.vert", "shaders/traitement_simple.frag");
+    program_id = glhelper::create_program_from_file("shaders/textured_quad.vert", "shaders/texture.frag");
 
   Mesh m = Mesh::create_grid(2);
   auto rmat = glm::rotate(glm::mat4(1.0), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -55,10 +54,19 @@ static void keyboard_callback(unsigned char key, int, int)
 
   switch (key)
   {
-    case 'r':
+    case 'f':
       glDeleteProgram(program_id);
       program_id = glhelper::create_program_from_file("shaders/textured_quad.vert", "shaders/texture.frag");
       break;
+    case 'g':
+      glDeleteProgram(program_id);
+      program_id = glhelper::create_program_from_file("shaders/textured_quad.vert", "shaders/traitement_simple.frag");
+      break;
+    case 'h':
+      glDeleteProgram(program_id);
+      program_id = glhelper::create_program_from_file("shaders/textured_quad.vert", "shaders/traitement_convolutif.frag");
+      break;
+    
     case 'p':
       glGetIntegerv(GL_VIEWPORT, viewport);
       glhelper::print_screen(viewport[2], viewport[3]);
